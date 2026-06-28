@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: petthecord
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PETTHECORD_TOKEN
+        sync: false          # set manually in Render dashboard
+      - key: ORIGIN
+        sync: false          # set to your Render URL e.g. https://petthecord.onrender.com
+      - key: CACHE_PATH
+        value: /tmp/petbot_cache
+      - key: CACHE_ENABLED
+        value: "true"
+      - key: RATE_LIMIT
+        value: "true"
+      - key: RATE_LIMIT_MAX
+        value: "15"
+      - key: RATE_LIMIT_WINDOW
+        value: "60"
