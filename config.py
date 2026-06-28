@@ -8,6 +8,13 @@ class Config:
     ORIGIN: str     = getenv("ORIGIN", "http://localhost:8000")
     SHARDS: int     = int(getenv("SHARDS", "1"))
 
+    # ── معرفات البوت والسيرفر (اختياري - لتحميل الأوامر فوراً) ──────────────
+    # ضعهم كـ Environment Variables أو غيّر القيم هنا مباشرة
+    # GUILD_ID  → معرف السيرفر  (يجعل أوامر السلاش تتحمل فوراً)
+    # CLIENT_ID → معرف البوت    (مطلوب لبعض عمليات التسجيل)
+    GUILD_ID:  int | None = int(g) if (g := getenv("GUILD_ID", "")) else None
+    CLIENT_ID: int | None = int(c) if (c := getenv("CLIENT_ID", "")) else None
+
     class Cache:
         ENABLED:  bool = getenv("CACHE_ENABLED", "true").lower() != "false"
         PATH:     str  = getenv("CACHE_PATH", "/tmp/petbot_cache")

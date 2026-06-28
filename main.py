@@ -3,6 +3,7 @@ import logging
 from logging import getLogger
 
 from aiohttp.web import AppRunner, TCPSite
+import discord
 from discord import Intents
 from discord.ext import commands
 
@@ -30,8 +31,17 @@ class PetBot(commands.AutoShardedBot):
 
         # Register slash commands
         await self.add_cog(PetCog(self._petter, Config.ORIGIN))
-        await self.tree.sync()
-        logger.info("Slash commands synced")
+
+        if Config.GUILD_ID:
+            # ✅ Guild sync → تحميل فوري (ثوانٍ)
+            guild = discord.Object(id=Config.GUILD_ID)
+            self.tree.copy_global_to(guild=guild)
+            await self.tree.sync(guild=guild)
+            logger.info("Slash commands synced to guild %s (instant)", Config.GUILD_ID)
+        else:
+            # ⚠️ Global sync → يستغرق حتى ساعة كاملة
+            await self.tree.sync()
+            logger.info("Slash commands synced globally (may take up to 1 hour)")
 
         # Start web server
         runner = AppRunner(PetServer(self._petter))
